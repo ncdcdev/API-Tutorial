@@ -23,18 +23,85 @@ const repository = AppDataSource.getRepository(Content)
 
 // GET /contents
 router.get('/contents', async (req: express.Request, res: express.Response) => {
-  const contents = await repository.find()
-  res.send(contents)
+  try {
+    const contents = await repository.find()
+    res.send(contents)
+  } catch (error) {
+    console.error(error)
+    res.status(500).send(error)
+  }
+})
+
+// POST /contents
+router.post('/contents', async (req: express.Request, res: express.Response) => {
+  try {
+    const content = new Content(req.body.title, req.body.body)
+    await repository.save(content)
+    res.send(content)
+  } catch (error) {
+    console.error(error)
+    res.status(500).send(error)
+  }
 })
 
 // GET /contents/:id
 router.get('/contents/:id', async (req: express.Request, res: express.Response) => {
-  const content = await repository.findOne({
-    where: { id: Number(req.params.id) },
-    order: { id: 'ASC' },
-  })
-  if (content == null) res.status(404).send()
-  res.send(content)
+  try {
+    const content = await repository.findOne({
+      where: { id: Number(req.params.id) },
+      order: { id: 'ASC' },
+    })
+    if (content == null) {
+      res.status(404).send()
+      return
+    }
+    res.send(content)
+  } catch (error) {
+    console.error(error)
+    res.status(500).send(error)
+  }
+})
+
+// PUT /contents/:id
+router.put('/contents/:id', async (req: express.Request, res: express.Response) => {
+  try {
+    const content = await repository.findOne({
+      where: { id: Number(req.params.id) },
+    })
+    if (content == null) {
+      res.status(404).send()
+      return
+    }
+
+    // PATCH的に一部更新も可能とする
+    content.title = req.body.title || content.title
+    content.body = req.body.body || content.body
+
+    await repository.save(content)
+    res.send(content)
+  } catch (error) {
+    console.error(error)
+    res.status(500).send(error)
+  }
+})
+
+// DELETE /contents/:id
+router.delete('/contents/:id', async (req: express.Request, res: express.Response) => {
+  try {
+    const content = await repository.findOne({
+      where: { id: Number(req.params.id) },
+    })
+    if (content == null) {
+      res.status(404).send()
+      return
+    }
+
+    await repository.remove(content)
+    res.sendStatus(204).send()
+  } catch (error) {
+    console.error(error)
+    res.status(500).send(error)
+  }
 })
 
 app.use(router)

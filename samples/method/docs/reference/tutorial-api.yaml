@@ -94,6 +94,12 @@ paths:
                 $ref: '#/components/schemas/Content'
       tags:
         - Content
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostContentRequest'
+      description: 一部のパラメータのみの更新も可能とする
 components:
   schemas:
     Content:
