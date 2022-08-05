@@ -16,3 +16,23 @@ yarn
 ```
 yarn start
 ```
+
+2. method
+インストール
+```
+cd samples/method
+yarn
+```
+
+DB起動
+```
+// samplesディレクトリに移動
+cd ../
+docker-compose up -d
+```
+
+起動
+```
+cd samples/method
+yarn start
+```

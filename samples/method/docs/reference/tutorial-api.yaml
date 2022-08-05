@@ -44,11 +44,11 @@ paths:
                   $ref: '#/components/schemas/Content'
       tags:
         - Content
-  '/contents/{contentsId}':
+  '/contents/{contentId}':
     parameters:
       - schema:
           type: string
-        name: contentsId
+        name: contentId
         in: path
         required: true
     get:

@@ -1,5 +1,6 @@
 import express from 'express'
-import { contents } from './constants'
+import AppDataSource from '../data-source'
+import { Content } from './entities/Content'
 
 const app: express.Express = express()
 
@@ -14,13 +15,29 @@ app.use((req, res, next) => {
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// Get /contents
+AppDataSource.initialize()
+
 const router: express.Router = express.Router()
-router.get('/contents', (req: express.Request, res: express.Response) => {
+
+const repository = AppDataSource.getRepository(Content)
+
+// GET /contents
+router.get('/contents', async (req: express.Request, res: express.Response) => {
+  const contents = await repository.find()
   res.send(contents)
 })
-app.use(router)
 
+// GET /contents/:id
+router.get('/contents/:id', async (req: express.Request, res: express.Response) => {
+  const content = await repository.findOne({
+    where: { id: Number(req.params.id) },
+    order: { id: 'ASC' },
+  })
+  if (content == null) res.status(404).send()
+  res.send(content)
+})
+
+app.use(router)
 // 3000番ポートでAPIサーバ起動
 app.listen(3000, () => {
   console.log('Example app listening on port 3000!')
