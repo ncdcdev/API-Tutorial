@@ -34,5 +34,21 @@ docker-compose up -d
 起動
 ```
 cd samples/method
+yarn migration
 yarn start
+```
+
+マイグレーションファイルを作成する場合
+```
+yarn make:migration
+```
+
+マイグレーションの実行
+```
+yarn migration
+```
+
+ロールバック
+```
+yarn rollback
 ```
