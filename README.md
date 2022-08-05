@@ -17,7 +17,7 @@ yarn
 yarn start
 ```
 
-2. method
+2. CRUD API
 インストール
 ```
 cd samples/method
