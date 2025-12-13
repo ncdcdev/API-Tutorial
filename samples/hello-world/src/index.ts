@@ -1,5 +1,5 @@
 import express from 'express'
-import "reflect-metadata"
+// import "reflect-metadata"
 
 const app: express.Express = express()
 
